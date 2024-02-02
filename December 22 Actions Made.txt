@@ -1,0 +1,21 @@
+MGA GINAWA KO DITO
+
+Added Filter Feature to product.component.html and .ts (Code Only)
+
+Created Folder on service/reportgen = audit,company-info, product, transactions, view-audit
+
+move the already generated services to company-info, and for the transactions the export services. (Move ng folder)
+
+generated excel-export and pdf-export services for audit, product,
+
+generated pdf-export service only for view-audit,
+
+coded report gen features to audit and inventory(product table) folders both export services. (Code Only)
+
+Added dropdown filtering on audit  (Code Only)
+
+Coded search-inputs on Audit (Code Only)
+
+Ui for review-transaction (Code Only)
+
+SO far wala pa akong installed na imports or packages, puro code tsaka gawa ng bagong service lng nagawa ko.

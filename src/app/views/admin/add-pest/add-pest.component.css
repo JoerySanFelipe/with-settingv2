@@ -1,0 +1,27 @@
+.material-card {
+  background-color: #fff; /* Set the card background color */
+  border-radius: 4px; /* Set the border radius for rounded corners */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Apply a subtle box shadow */
+  transition: box-shadow 0.3s; /* Add a transition for hover effect */
+}
+
+.material-card:hover {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+}
+
+.card-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  width: 100%;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-subtitle {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  width: 100%;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

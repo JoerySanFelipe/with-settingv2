@@ -1,0 +1,43 @@
+.title {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.price {
+  color: #5d6679;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.date {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+}
+.containers {
+  border-radius: 10px;
+
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+table th {
+  color: #667085;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+}
+
+h6 {
+  font-weight: bold;
+}
+
+.btn svg {
+  margin-right: 10px;
+}
+
+.dropdown-item svg {
+  margin-right: 10px;
+}

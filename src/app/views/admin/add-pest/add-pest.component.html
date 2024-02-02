@@ -1,0 +1,142 @@
+<div
+  class="container-fluid"
+  style="
+    overflow-x: auto;
+    white-space: nowrap;
+    min-height: 100vh;
+    padding: 1rem;
+  "
+>
+  <div class="d-flex gap-3">
+    <div
+      class="d-flex flex-column"
+      *ngFor="let data of _pestMapList; index as index"
+    >
+      <div class="card" style="width: 18rem; min-width: 18rem">
+        <div class="card-header">{{ data.title }}</div>
+        <div class="card-body">
+          <div class="container-fluid">
+            <div class="d-flex flex-column gap-1 mb-1">
+              <div
+                class="card material-card"
+                *ngFor="let topic of data.topic"
+                style="margin-bottom: 10px"
+              >
+                <img
+                  [src]="topic.image"
+                  class="card-img-top"
+                  *ngIf="topic.image !== ''"
+                  style="max-height: 150px"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">{{ topic.title }}</h5>
+                  <h6 class="card-subtitle text-body-secondary">
+                    {{ topic.desc }}
+                  </h6>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button
+            class="btn btn-primary w-100"
+            type="button"
+            (click)="selectedPest(index)"
+          >
+            Add Topic
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex flex-column">
+      <button
+        *ngIf="!isCardClicked"
+        class="btn btn-outline-danger"
+        (click)="onClick()"
+        style="width: 18rem; min-width: 18rem"
+      >
+        Add a Pest Map
+      </button>
+    </div>
+
+    <div
+      *ngIf="isCardClicked"
+      class="card"
+      style="width: 18rem; min-width: 18rem"
+    >
+      <div class="card-body">
+        <h5 class="card-title">Add Pest Map</h5>
+        <form [formGroup]="_pestForm" (submit)="addPest()">
+          <div class="input-group mb-3">
+            <input
+              type="text"
+              formControlName="title"
+              class="form-control"
+              placeholder="Title"
+              aria-label="Title"
+              aria-describedby="basic-addon1"
+            />
+          </div>
+          <div class="input-group mb-3">
+            <input
+              type="file"
+              accept="image/*"
+              class="form-control"
+              placeholder="file"
+              (change)="onSelectPestMapFile($event)"
+              aria-label="file"
+              aria-describedby="basic-addon1"
+            />
+          </div>
+
+          <div class="card-actions d-flex gap-2">
+            <button
+              class="btn btn-danger"
+              type="submit"
+              [disabled]="
+                _pestForm.invalid ||
+                _selectedPestFile == null ||
+                (loadingService.isLoading('new-pest') | async) === true
+              "
+            >
+              <span
+                *ngIf="(loadingService.isLoading('new-pest') | async) === true"
+                class="spinner-border spinner-border-sm me-2"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              {{
+                (loadingService.isLoading("new-pest") | async) === true
+                  ? "Saving..."
+                  : "Save"
+              }}
+            </button>
+            <button
+              class="btn btn-secondary"
+              type="button"
+              (click)="resetCard()"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-x"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+                />
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-add-topic
+  [pestID]="_selectedPest ?? ''"
+  (pestEvent)="topicModal.hide()"
+></app-add-topic>

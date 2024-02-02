@@ -1,0 +1,164 @@
+<div class="container-fluid p-3">
+  <div class="row">
+    <div class="col-6">
+      <div class="containers">
+        <h5>Overview</h5>
+
+        <div class="row">
+          <div class="col">
+            <h5>
+              {{
+                formatPrice(
+                  _transactionCalculator.calculateTotalSales() -
+                    _transactionCalculator.calculateTotalCost()
+                )
+              }}
+            </h5>
+            <p>Total Profit</p>
+          </div>
+
+          <div class="col">
+            <h5>
+              {{
+                formatPrice(
+                  _transactionCalculator.calculateTotalSales() -
+                    _transactionCalculator.calculateTotalCost()
+                )
+              }}
+            </h5>
+            <p class="text-warning">Revenue</p>
+          </div>
+          <div class="col">
+            <h5>
+              {{ formatPrice(_transactionCalculator.calculateTotalSales()) }}
+            </h5>
+            <p style="color: purple">Sales</p>
+          </div>
+        </div>
+        <hr />
+        <div class="row">
+          <div class="col">
+            <h5>
+              {{ formatPrice(_productCalculator.getTotalPurchases()) }}
+            </h5>
+            <p>Net purchase value</p>
+          </div>
+
+          <div class="col">
+            <h5>
+              {{ formatPrice(_productCalculator.getTotalSalesValue()) }}
+            </h5>
+            <p class="text-warning">Net sales value</p>
+          </div>
+          <div class="col">
+            <h5>₱ 0.00</h5>
+            <p>MoM Profit</p>
+          </div>
+          <div class="col">
+            <h5>₱ 0.00</h5>
+            <p>YoY Profit</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="containers">
+        <div class="d-flex align-items-center justify-content-between">
+          <h5>Best Selling Category</h5>
+          <button type="button" class="btn btn-light text-primary">
+            See all
+          </button>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Category</th>
+
+              <th scope="col text-end">Turn Over</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let top of _transactionCalculator
+                  .getCategorySales(_transactionList, _productList)
+                  .slice(0, 3)
+              "
+            >
+              <td>{{ top.category }}</td>
+
+              <td>{{ formatPrice(top.totalSales) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="containers">
+        <div class="d-flex align-items-center justify-content-between">
+          <h5>Profit & Revenue</h5>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-secondary">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-calendar"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"
+                />
+              </svg>
+              Weekly
+            </button>
+            <button class="btn btn-outline-secondary">Download All</button>
+          </div>
+        </div>
+        <canvas
+          style="max-height: 400px"
+          baseChart
+          [datasets]="barChartData"
+          [labels]="barChartLabels"
+          [options]="barChartOptions"
+          [legend]="barChartLegend"
+        >
+        </canvas>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="containers">
+        <div class="d-flex align-items-center justify-content-between">
+          <h5>Best Selling Product</h5>
+          <button type="button" class="btn btn-light text-primary">
+            See all
+          </button>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Category</th>
+              <th scope="col">Remaining Quantity</th>
+              <th scope="col">Turn Over</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let top of _transactionCalculator.calculateTopSellingStocks()
+              "
+            >
+              <th scope="row">{{ top.name }}</th>
+              <td>{{ getProduct(top.id)?.category }}</td>
+              <td>{{ countRemaining(top.name, _productItemList) }}</td>
+              <td>{{ formatPrice(top.price) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

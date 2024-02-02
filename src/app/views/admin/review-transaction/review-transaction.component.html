@@ -1,0 +1,78 @@
+<!-- <div class="box text-white">
+  <ngx-json-viewer [json]="_transaction"></ngx-json-viewer>
+</div> -->
+
+<div class="container-fluid d-flex flex-column h-100 gap-3 p-3">
+  <div class="containers p-3">
+    <div class="row top">
+      <div class="col">
+        <div class="row">
+          <button class="btn btn-outline-secondary back-btn" (click)="location.back()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+              class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z" />
+            </svg>
+          </button>
+          <h6 class="order-id">Order ID: <span class="order-id-text">{{ _transaction?.id }}</span></h6>
+          <h6 class="order-type">Type: <span class="order-text">{{ _transaction?.type }}</span></h6>
+        </div>
+      </div>
+      <div class="col">
+        <div class="row d-flex justify-content-end">
+          <button mat-button class="btn btn-outline-secondary search">
+            <i class="bi bi-filetype-pdf"></i>Download
+          </button>
+          <h6 class="order-status d-flex justify-content-end">Status:&nbsp;<span class="order-text">Completed</span>
+          </h6>
+        </div>
+      </div>
+    </div>
+    <div class="row mid">
+      <div class="col">
+        <div class="left">
+          <h6 class="label">Delivery</h6>
+          <h6>Receiver: {{ _transaction?.address?.contact?.name }}</h6>
+          <h6>Phone: {{ _transaction?.address?.contact?.phone }}</h6>
+          <h6>Address: {{ displayAddress(_transaction?.address!) }}</h6>
+          <h6 class="label">Driver</h6>
+          <app-staff-info class="driver-details" [staffID]="_transaction?.cashierID ?? ''"></app-staff-info>
+        </div>
+      </div>
+      <div class="col">
+        <div class="row d-flex justify-content-end">
+          <h6 class="label">Payment</h6>
+          <h6>Confirmed by: {{ _transaction?.payment?.details?.confirmedBy }}</h6>
+          <h6>Payment Method: {{ _transaction?.payment?.type }}</h6>
+          <button class="btn btn-sm btn-light text-success" *ngIf="isGcash(_transaction?.payment?.type!)">
+            View Receipt
+          </button>
+          <h6>Status: {{ _transaction?.payment?.status }}</h6>
+          <h6>Amount: {{ _transaction?.payment?.amount }}</h6>
+          <h6>Amount Recieved: {{ _transaction?.payment?.details?.cashReceive }}</h6>
+          <h6>Date: Di ko magawa yung date hihi</h6>
+        </div>
+      </div>
+    </div>
+    <div class="row bottom">
+      <div class="col">
+        <h6 class="label">Product</h6>
+        <h6>Image:</h6>
+        <div>
+          <img src="{{ _transaction?.orderList?.[0]?.imageUrl }}" alt="product image">
+        </div>
+      </div>
+      <div class="col bottom">
+        <div class="row d-flex justify-content-start">
+          <h6 class="label"></h6>
+          <h6>ID: {{ _transaction?.orderList?.[0]?.productID }}</h6>
+          <h6>Name: {{ _transaction?.orderList?.[0]?.productName }}</h6>
+          <h6>Price: {{ _transaction?.orderList?.[0]?.price }}</h6>
+          <h6>Quantity: {{ _transaction?.orderList?.[0]?.quantity }}</h6>
+          <h6>Shipping Fee: {{ _transaction?.orderList?.[0]?.shippingInfo?.shipping }}</h6>
+          <h6 class="total">Total: {{ _transaction?.payment?.amount }}</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

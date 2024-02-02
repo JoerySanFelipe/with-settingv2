@@ -1,0 +1,9 @@
+<div class="d-flex gap-2 align-items-center">
+  <img
+    [src]="customerProfile()"
+    alt="Profile Image"
+    class="img-fluid rounded-circle"
+    style="height: 40px; width: 40px"
+  />
+  <h6>{{ customer?.name ?? "no name" }}</h6>
+</div>

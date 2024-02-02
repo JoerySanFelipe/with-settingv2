@@ -1,0 +1,205 @@
+<div class="container-fluid">
+  <div class="row w-100">
+    <div class="col-8">
+      <div class="box">
+        <h5 class="mb-3">Sales Overview</h5>
+
+        <div class="d-flex">
+          <div class="container">
+            <img src="../../../../assets/images/Sales.png" />
+            <span class="fw-bold text-secondary">{{
+              formatPrice(_transactionCalculator.calculateTotalSales())
+            }}</span>
+            <p class="text-secondary">Sales</p>
+          </div>
+          <div class="container">
+            <img src="../../../../assets/images/Revenue.png" />
+            <span class="fw-bold text-secondary">{{
+              formatPrice(
+                _transactionCalculator.calculateTotalSales() -
+                  _transactionCalculator.calculateTotalCost()
+              )
+            }}</span>
+            <p class="text-secondary">Revenue</p>
+          </div>
+
+          <div class="container">
+            <img src="../../../../assets/images/Profit.png" />
+            <span class="fw-bold text-secondary">{{
+              formatPrice(
+                _transactionCalculator.calculateTotalSales() -
+                  _transactionCalculator.calculateTotalCost()
+              )
+            }}</span>
+            <p class="text-secondary">Profit</p>
+          </div>
+
+          <div class="container">
+            <img src="../../../../assets/images/Cost.png" />
+            <span class="fw-bold text-secondary">{{
+              formatPrice(_transactionCalculator.calculateTotalCost())
+            }}</span>
+            <p class="text-secondary">Cost</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="box">
+        <h5 class="mb-3">Inventory Summary</h5>
+        <div class="d-flex">
+          <div class="container">
+            <img src="../../../../assets/images/Quantity.png" />
+            <span class="fw-bold text-secondary">{{
+              getQuantityOnHand(_productItems)
+            }}</span>
+            <p class="text-secondary">Quantity on Hand</p>
+          </div>
+          <div class="container">
+            <img src="../../../../assets/images/way.png" />
+            <span class="fw-bold text-secondary">800</span>
+            <p class="text-secondary">On the way</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-8">
+      <div class="box">
+        <h5 class="mb-3">Purchases Overview</h5>
+        <div class="d-flex">
+          <div class="container">
+            <img src="../../../../assets/images/purchase.png" />
+            <span class="fw-bold text-secondary">{{
+              formatPrice(_transactionCalculator.calculateTotalCost())
+            }}</span>
+            <p class="text-secondary">Purchases</p>
+          </div>
+          <div class="container">
+            <img src="../../../../assets/images/sales2.png" />
+            <span class="fw-bold text-secondary">{{
+              formatPrice(_transactionCalculator.calculateTotalSales())
+            }}</span>
+            <p class="text-secondary">Sales</p>
+          </div>
+
+          <div class="container">
+            <img src="../../../../assets/images/Cancel.png" />
+            <span class="fw-bold text-secondary">{{
+              _transactionCalculator.countCancelledTransactions().length
+            }}</span>
+            <p class="text-secondary">Cancelled</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="box">
+        <h5 class="mb-3">Customer Summary</h5>
+        <div class="d-flex">
+          <div class="container">
+            <img src="../../../../assets/images/Suppliers.png" />
+            <span class="fw-bold text-secondary">{{
+              _transactionCalculator.getAllActiveCustomer()
+            }}</span>
+            <p class="text-secondary">Number of Customers</p>
+          </div>
+          <div class="container">
+            <img src="../../../../assets/images/Categories.png" />
+            <span class="fw-bold text-secondary">{{
+              _productCalculator.countCategories()
+            }}</span>
+            <p class="text-secondary">Number of Categories</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-8">
+      <div class="box">
+        <h5 class="mb-3">Sales & Purchases</h5>
+        <canvas
+          baseChart
+          style="max-height: 300px"
+          [datasets]="barChartData"
+          [labels]="barChartLabels"
+          [options]="barChartOptions"
+          [legend]="barChartLegend"
+        >
+        </canvas>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="box">
+        <h5 class="mb-3">Order Summary</h5>
+        <canvas
+          baseChart
+          height="300px"
+          style="max-height: 300px"
+          [datasets]="lineChartData"
+          [labels]="lineChartLabels"
+          [options]="lineChartOptions"
+          [legend]="lineChartLegend"
+          type="line"
+        >
+        </canvas>
+      </div>
+    </div>
+    <div class="col-8" style="max-height: 400px">
+      <div class="box">
+        <h5 class="mb-3">Top Selling Stock</h5>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Sold Quantity</th>
+              <th scope="col">Remaining Quantity</th>
+              <th scope="col">Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let top of _transactionCalculator.calculateTopSellingStocks()
+              "
+            >
+              <th scope="row">{{ top.name }}</th>
+              <td>{{ top.soldQuantity }}</td>
+              <td>{{ countRemaining(top.name, _productItems) }}</td>
+              <td>{{ formatPrice(top.price) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-4" style="max-height: 400px">
+      <div class="box">
+        <h5 class="mb-3">Low Quantity Stocks</h5>
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let items of _lowStocks">
+            <div class="d-flex gap-2 p-1 w-100">
+              <div style="width: 50px; height: 50px">
+                <img
+                  [src]="items.image"
+                  class="rounded"
+                  alt="Product image"
+                  style="width: 50px; height: 50px"
+                />
+              </div>
+
+              <div class="d-flex w-100 flex-column gap-2">
+                <h5 class="card-title" id="product-title">
+                  {{ items.name }}
+                </h5>
+                <h5 class="card-text text-secondary">
+                  {{ getStocks(items.stocks) }} {{ items.stocks }}
+                </h5>
+              </div>
+              <div>
+                <span class="badge bg-danger"> LOW </span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

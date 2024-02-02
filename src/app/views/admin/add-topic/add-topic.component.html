@@ -1,0 +1,216 @@
+<div
+  class="modal fade"
+  id="topicModal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="topicModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="topicModalLabel">Add Topic</h1>
+
+
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="d-flex gap-3">
+            <div class="container" style="width: 60%">
+              <form [formGroup]="_topicForm">
+                <div class="row g-3">
+                  <div class="col">
+                    <input
+                      type="text"
+                      formControlName="title"
+                      class="form-control"
+                      placeholder="title"
+                      aria-label="title"
+                    />
+                  </div>
+                  <div class="col">
+                    <select
+                      id="inputState"
+                      class="form-select"
+                      formControlName="category"
+                    >
+                      <option selected value="INSECTS">INSECTS</option>
+                      <option value="DISEASES">DISEASES</option>
+                      <option value="WEEDS">WEEDS</option>
+                    </select>
+                  </div>
+                  <div class="col-12">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="description"
+                      aria-label="description"
+                      formControlName="description"
+                    />
+                  </div>
+                  <div class="col-12">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      (change)="onSelectTopicFile($event)"
+                      formControlName="image"
+                      class="form-control"
+                      placeholder="image"
+                      aria-label="image"
+                    />
+                  </div>
+                </div>
+              </form>
+              <form [formGroup]="_contentForm" (submit)="addContent()">
+                <h5 style="margin-top: 10px; margin-bottom: 10px">Contents</h5>
+                <div class="row g-3">
+                  <div class="col">
+                    <input
+                      type="text"
+                      formControlName="title"
+                      class="form-control"
+                      placeholder="title"
+                      aria-label="title"
+                    />
+                  </div>
+                  <div class="col">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      (change)="onSelectContentFile($event)"
+                      class="form-control"
+                      placeholder="image"
+                      aria-label="image"
+                    />
+                  </div>
+                  <div class="col-12">
+                    <div class="input-group">
+                      <textarea
+                        class="form-control"
+                        formControlName="description"
+                        aria-label="With textarea"
+                        placeholder="Content Description"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="col-12 text-align-end">
+                    <button
+                      class="btn btn-success btn-sm"
+                      [disabled]="
+                        _contentForm.invalid ||
+                        (loadingService.isLoading('add-content') | async) ===
+                          true
+                      "
+                      type="submit"
+                    >
+                      <span
+                        *ngIf="
+                          (loadingService.isLoading('add-content') | async) ===
+                          true
+                        "
+                        class="spinner-border spinner-border-sm me-2"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      {{
+                        (loadingService.isLoading("add-content") | async) ===
+                        true
+                          ? "Saving content..."
+                          : "Save content"
+                      }}
+                    </button>
+                  </div>
+                </div>
+              </form>
+
+              <div class="d-flex flex-column gap-3 w-100">
+                <div
+                  class="content-container"
+                  *ngFor="let content of _contentList"
+                >
+                  <img
+                    [src]="content.image"
+                    *ngIf="content.image !== ''"
+                    width="100px"
+                    height="100px"
+                  />
+                  <div class="content">
+                    <h5>{{ content.title }}</h5>
+                    <p>{{ content.description }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="container" style="width: 40%">
+              <div class="input-group mb-3">
+                <div class="form-floating">
+                  <select
+                    class="form-select"
+                    id="floatingSelect"
+                    #recommendation
+                  >
+                    <option
+                      *ngFor="let product of _products"
+                      [value]="product.id"
+                    >
+                      {{ product.name }}
+                    </option>
+                  </select>
+                  <label for="floatingSelect">Add Recommendation</label>
+                </div>
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  (click)="addRecomendations(recommendation.value)"
+                  id="button-addon2"
+                >
+                  Add
+                </button>
+              </div>
+
+              <ul class="list-group">
+                <li
+                  class="list-group-item"
+                  *ngFor="let recommendation of _recomendations"
+                >
+                  <h5>{{ recommendation.name }}</h5>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+        type="button"
+        class="btn btn-success"
+        (click)="genearateTopic()"
+        [disabled]="
+          _topicForm.invalid ||
+          _contentList.length == 0 ||
+          _recomendations.length == 0 ||
+          (loadingService.isLoading('add-topic') | async) === true
+        "
+      >
+        <span
+          *ngIf="(loadingService.isLoading('add-topic') | async) === true"
+          class="spinner-border spinner-border-sm me-2"
+          role="status"
+          aria-hidden="true"
+        ></span>
+        {{
+          (loadingService.isLoading("add-topic") | async) === true
+            ? "Saving Topic..."
+            : "Save Topic"
+        }}
+      </button>
+      
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+          close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

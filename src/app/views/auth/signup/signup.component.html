@@ -1,0 +1,55 @@
+<!-- <div class="d-flex flex-column h-100 gap-3">
+
+    <div class="containers flex-grow-1 p-2">
+      <div class="d-flex flex-column">
+        <div class="d-flex justify-content-between align-items-center p-2">
+          <h4>Products</h4>
+          <div class="d-flex gap-2">
+            <app-add-product></app-add-product>
+            <button class="btn btn-outline-secondary">Filters</button>
+            <button class="btn btn-outline-secondary">Download All</button>
+          </div>
+        </div>
+  
+        <div class="flex-grow-1 container-fluid">
+          <table class="table table-white table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Products</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Created Date</th>
+                <th scope="col">Expiry Date</th>
+                <th scope="col">Availability</th>
+  
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody *ngFor="let products of _products | async">
+              <tr>
+                <td>{{ products.name }}</td>
+                <td>{{ 0 }}</td>
+                <td>0</td>
+                <td>
+                  {{ dateService.convertTimestamp(products.createdAt) }}
+                </td>
+                <td>
+                  {{ products.expiryDate }}
+                </td>
+                <td>0</td>
+                <td>
+                  <app-add-variation [product]="products"></app-add-variation>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="d-flex justify-content-between align-items-center p-3">
+          <button class="btn btn-outline-secondary">Previous</button>
+          <h6>Page 1 of 10</h6>
+          <button class="btn btn-outline-secondary">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+   -->

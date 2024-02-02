@@ -1,0 +1,647 @@
+<div class="container-fluid vh-100 p-3">
+  <div class="d-flex h-100 flex-column gap-3">
+    <div class="containers p-3">
+      <h5>Overall Orders</h5>
+      <div class="row">
+        <div class="col">
+          <h6 class="text-primary">Total Orders</h6>
+          <div class="row">
+            <p class="fw-bold">14</p>
+            <p class="text-secondary">Last 7 days</p>
+          </div>
+        </div>
+        <div class="col">
+          <h6 class="text-warning">Total Received</h6>
+          <div class="row">
+            <div class="col text-start">
+              <p class="fw-bold">14</p>
+              <p class="text-secondary">Last 7 days</p>
+            </div>
+            <div class="col text-end">
+              <p class="fw-bold">14</p>
+              <p class="text-secondary">Last 7 days</p>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <h6 style="color: blueviolet">Top Failed</h6>
+          <div class="row">
+            <div class="col text-start">
+              <p class="fw-bold">14</p>
+              <p class="text-secondary">Last 7 days</p>
+            </div>
+            <div class="col text-end">
+              <p class="fw-bold">14</p>
+              <p class="text-secondary">Last 7 days</p>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <h6 class="text-danger">On The way</h6>
+          <div class="row">
+            <div class="col text-start">
+              <p class="fw-bold">14</p>
+              <p class="text-secondary">Last 7 days</p>
+            </div>
+            <div class="col text-end">
+              <p class="fw-bold">14</p>
+              <p class="text-secondary">Last 7 days</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul class="nav nav-pills nav-fill" id="list-tab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link active"
+          id="list-pending-list"
+          data-bs-toggle="tab"
+          href="#list-pending"
+          role="tab"
+          aria-controls="list-pending"
+          >Pending</a
+        >
+      </li>
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link"
+          id="list-confirm-list"
+          data-bs-toggle="tab"
+          href="#list-confirm"
+          role="tab"
+          aria-controls="list-confirm"
+          >Confirm</a
+        >
+      </li>
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link"
+          id="list-to-deliver-list"
+          data-bs-toggle="tab"
+          href="#list-to-deliver"
+          role="tab"
+          aria-controls="list-to-deliver"
+          >To Deliver</a
+        >
+      </li>
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link"
+          id="list-to-pick-list"
+          data-bs-toggle="tab"
+          href="#list-to-pick"
+          role="tab"
+          aria-controls="list-to-pick"
+          >To Pick</a
+        >
+      </li>
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link"
+          id="list-out-of-delivery-list"
+          data-bs-toggle="tab"
+          href="#list-out-of-delivery"
+          role="tab"
+          aria-controls="list-out-of-delivery"
+          >Out of delivery</a
+        >
+      </li>
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link"
+          id="list-failed-list"
+          data-bs-toggle="tab"
+          href="#list-failed"
+          role="tab"
+          aria-controls="list-failed"
+          >Failed</a
+        >
+      </li>
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link"
+          id="list-completed-list"
+          data-bs-toggle="tab"
+          href="#list-completed"
+          role="tab"
+          aria-controls="list-completed"
+          >Complete</a
+        >
+      </li>
+    </ul>
+
+    <div
+      class="tab-content bg-white flex-grow-1 border-radius-1"
+      id="nav-tabContent"
+    >
+      <div
+        class="tab-pane fade show active"
+        id="list-pending"
+        role="tabpanel"
+        aria-labelledby="list-pending-list"
+      >
+        <h5 class="text-danger">Pending Orders</h5>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">ORDER DETAILS</th>
+              <th scope="col">CUSTOMER NAME</th>
+              <th scope="col">ORDER VALUE</th>
+              <th scope="col">IS ORDER PAID?</th>
+              <th scope="col">ORDER DATE</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let transactions of getTrasactionByStatus(1)">
+            <tr>
+              <td>
+                <div class="d-flex flex-column gap-1">
+                  <h6>ORDER ID : {{ transactions.id }}</h6>
+                  <h6 class="text-success">{{ transactions.type }}</h6>
+                </div>
+              </td>
+              <td>
+                <app-customer-info
+                  [customerID]="transactions.customerID"
+                ></app-customer-info>
+              </td>
+              <td>
+                <div>
+                  <p>
+                    <b>
+                      {{ transactions.payment.amount.toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'PHP',
+                      })}}
+                    </b>
+
+                    - {{ transactions.payment.type }}
+                  </p>
+                </div>
+              </td>
+              <td>{{ transactions.payment.status }}</td>
+              <td>{{ convertTimestamp(transactions.createdAt) }}</td>
+              <td>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-danger">Decline</button>
+                  <button
+                    class="btn btn-success"
+                    (click)="acceptOrder(transactions.id, transactions.payment)"
+                    [disabled]="
+                      (loadingService.isLoading(transactions.id) | async) ===
+                      true
+                    "
+                  >
+                    <span
+                      *ngIf="
+                        (loadingService.isLoading(transactions.id) | async) ===
+                        true
+                      "
+                      class="spinner-border spinner-border-sm me-2"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    {{
+                      (loadingService.isLoading(transactions.id) | async) ===
+                      true
+                        ? "loading..."
+                        : "Confirm"
+                    }}
+                  </button>
+
+                  <button
+                    class="btn btn-success"
+                    (click)="reviewTransaction(transactions)"
+                  >
+                    Review
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div
+        class="tab-pane fade"
+        id="list-confirm"
+        role="tabpanel"
+        aria-labelledby="list-confirm-list"
+      >
+        <h5 class="text-success">Accepted</h5>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">ORDER DETAILS</th>
+              <th scope="col">CUSTOMER NAME</th>
+              <th scope="col">ORDER VALUE</th>
+              <th scope="col">IS ORDER PAID?</th>
+              <th scope="col">ORDER DATE</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let transactions of getTrasactionByStatus(2)">
+            <tr>
+              <td>
+                <div class="d-flex flex-column gap-1">
+                  <h6>ORDER ID : {{ transactions.id }}</h6>
+                  <h6 class="text-success">{{ transactions.type }}</h6>
+                </div>
+              </td>
+              <td>
+                <app-customer-info
+                  [customerID]="transactions.customerID"
+                ></app-customer-info>
+              </td>
+              <td>
+                <div>
+                  <p>
+                    <b>
+                      {{ transactions.payment.amount.toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'PHP',
+                      })}}
+                    </b>
+
+                    - {{ transactions.payment.type }}
+                  </p>
+                </div>
+              </td>
+              <td>{{ transactions.payment.status }}</td>
+              <td>{{ convertTimestamp(transactions.createdAt) }}</td>
+              <td>
+                <div class="d-flex gap-2">
+                  <button
+                    *ngIf="transactions.type.toString() == 'PICK_UP'"
+                    class="btn btn-success"
+                    (click)="
+                      readyToPickUp(transactions.id, transactions.payment)
+                    "
+                  >
+                    Ready to Pick Up
+                  </button>
+                  <button
+                    *ngIf="transactions.type.toString() == 'DELIVERY'"
+                    (click)="
+                      readyToDeliver(transactions.id, transactions.payment)
+                    "
+                    class="btn btn-danger"
+                  >
+                    Ready to Deliver
+                  </button>
+                  <button
+                    class="btn btn-success"
+                    (click)="reviewTransaction(transactions)"
+                  >
+                    Review
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="tab-pane fade"
+        id="list-to-deliver"
+        role="tabpanel"
+        aria-labelledby="list-to-deliver-list"
+      >
+        <h5 class="text-success">TO DELIVER</h5>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">ORDER DETAILS</th>
+              <th scope="col">CUSTOMER NAME</th>
+              <th scope="col">ORDER VALUE</th>
+              <th scope="col">IS ORDER PAID?</th>
+              <th scope="col">ORDER DATE</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let transactions of getTrasactionByStatus(3)">
+            <tr>
+              <td>
+                <div class="d-flex flex-column gap-1">
+                  <h6>ORDER ID : {{ transactions.id }}</h6>
+                  <h6 class="text-success">{{ transactions.type }}</h6>
+                </div>
+              </td>
+              <td>
+                <app-customer-info
+                  [customerID]="transactions.customerID"
+                ></app-customer-info>
+              </td>
+              <td>
+                <div>
+                  <p>
+                    <b>
+                      {{ transactions.payment.amount.toLocaleString('en-US', {
+                      style: 'currency',
+                      currency: 'PHP',
+                    })}}
+                    </b>
+
+                    - {{ transactions.payment.type }}
+                  </p>
+                </div>
+              </td>
+              <td>{{ transactions.payment.status }}</td>
+              <td>{{ convertTimestamp(transactions.createdAt) }}</td>
+              <td>
+                <div class="d-flex gap-2">
+                  <button
+                    *ngIf="transactions.cashierID === ''"
+                    class="btn btn-danger"
+                    (click)="selectTransaction(transactions)"
+                  >
+                    Add Driver
+                  </button>
+                  <button
+                    *ngIf="transactions.cashierID !== ''"
+                    (click)="
+                      ongoingDeliver(transactions.id, transactions.payment)
+                    "
+                    class="btn btn-danger"
+                  >
+                    Deliver Order
+                  </button>
+                  <button
+                    class="btn btn-success"
+                    (click)="reviewTransaction(transactions)"
+                  >
+                    Review
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div
+        class="tab-pane fade"
+        id="list-to-pick"
+        role="tabpanel"
+        aria-labelledby="list-to-pick-list"
+      >
+        <h5 class="text-success">TO PICK UP</h5>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">ORDER DETAILS</th>
+              <th scope="col">CUSTOMER NAME</th>
+              <th scope="col">ORDER VALUE</th>
+              <th scope="col">IS ORDER PAID?</th>
+              <th scope="col">ORDER DATE</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let transactions of getTrasactionByStatus(4)">
+            <tr>
+              <td>
+                <div class="d-flex flex-column gap-1">
+                  <h6>ORDER ID : {{ transactions.id }}</h6>
+                  <h6 class="text-success">{{ transactions.type }}</h6>
+                </div>
+              </td>
+              <td>
+                <app-customer-info
+                  [customerID]="transactions.customerID"
+                ></app-customer-info>
+              </td>
+              <td>
+                <div>
+                  <p>
+                    <b>
+                      {{ transactions.payment.amount.toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: 'PHP',
+                  })}}
+                    </b>
+
+                    - {{ transactions.payment.type }}
+                  </p>
+                </div>
+              </td>
+              <td>{{ transactions.payment.status }}</td>
+              <td>{{ convertTimestamp(transactions.createdAt) }}</td>
+              <td>
+                <div class="d-flex gap-2">
+                  <button
+                    (click)="markAsComplete(transactions, transactions.payment)"
+                    class="btn btn-success"
+                  >
+                    Completed
+                  </button>
+
+                  <button
+                    class="btn btn-success"
+                    (click)="reviewTransaction(transactions)"
+                  >
+                    Review
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="tab-pane fade"
+        id="list-out-of-delivery"
+        role="tabpanel"
+        aria-labelledby="list-out-of-delivery-list"
+      >
+        <h5 class="text-success">OUT OF DELIVERY</h5>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">ORDER DETAILS</th>
+              <th scope="col">CUSTOMER NAME</th>
+              <th scope="col">ORDER VALUE</th>
+              <th scope="col">IS ORDER PAID?</th>
+              <th scope="col">ORDER DATE</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let transactions of getTrasactionByStatus(5)">
+            <tr>
+              <td>
+                <div class="d-flex flex-column gap-1">
+                  <h6>ORDER ID : {{ transactions.id }}</h6>
+                  <h6 class="text-success">{{ transactions.type }}</h6>
+                </div>
+              </td>
+              <td>
+                <app-customer-info
+                  [customerID]="transactions.customerID"
+                ></app-customer-info>
+              </td>
+              <td>
+                <div>
+                  <p>
+                    <b>
+                      {{ transactions.payment.amount.toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'PHP',
+                })}}
+                    </b>
+
+                    - {{ transactions.payment.type }}
+                  </p>
+                </div>
+              </td>
+              <td>{{ transactions.payment.status }}</td>
+              <td>{{ convertTimestamp(transactions.createdAt) }}</td>
+              <td>
+                <button
+                  (click)="markAsComplete(transactions, transactions.payment)"
+                  class="btn btn-success"
+                >
+                  Completed
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div
+        class="tab-pane fade"
+        id="list-failed"
+        role="tabpanel"
+        aria-labelledby="list-failed-list"
+      >
+        <h5 class="text-success">FAILED ORDERS</h5>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">ORDER DETAILS</th>
+              <th scope="col">CUSTOMER NAME</th>
+              <th scope="col">ORDER VALUE</th>
+              <th scope="col">IS ORDER PAID?</th>
+              <th scope="col">ORDER DATE</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let transactions of getTrasactionByStatus(6)">
+            <tr>
+              <td>
+                <div class="d-flex flex-column gap-1">
+                  <h6>ORDER ID : {{ transactions.id }}</h6>
+                  <h6 class="text-success">{{ transactions.type }}</h6>
+                </div>
+              </td>
+              <td>
+                <app-customer-info
+                  [customerID]="transactions.customerID"
+                ></app-customer-info>
+              </td>
+              <td>
+                <div>
+                  <p>
+                    <b>
+                      {{ transactions.payment.amount.toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'PHP',
+                })}}
+                    </b>
+
+                    - {{ transactions.payment.type }}
+                  </p>
+                </div>
+              </td>
+              <td>{{ transactions.payment.status }}</td>
+              <td>{{ convertTimestamp(transactions.createdAt) }}</td>
+              <td>
+                <button
+                  (click)="markAsComplete(transactions, transactions.payment)"
+                  class="btn btn-success"
+                >
+                  Completed
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div
+        class="tab-pane fade"
+        id="list-completed"
+        role="tabpanel"
+        aria-labelledby="list-completed-list"
+      >
+        <h5 class="text-success">COMPLETED ORDERS</h5>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">ORDER DETAILS</th>
+              <th scope="col">CUSTOMER NAME</th>
+              <th scope="col">ORDER VALUE</th>
+              <th scope="col">IS ORDER PAID?</th>
+              <th scope="col">ORDER DATE</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let transactions of getTrasactionByStatus(7)">
+            <tr>
+              <td>
+                <div class="d-flex flex-column gap-1">
+                  <h6>ORDER ID : {{ transactions.id }}</h6>
+                  <h6 class="text-success">{{ transactions.type }}</h6>
+                </div>
+              </td>
+              <td>
+                <app-customer-info
+                  [customerID]="transactions.customerID"
+                ></app-customer-info>
+              </td>
+              <td>
+                <div>
+                  <p>
+                    <b>
+                      {{ transactions.payment.amount.toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'PHP',
+                })}}
+                    </b>
+
+                    - {{ transactions.payment.type }}
+                  </p>
+                </div>
+              </td>
+              <td>{{ transactions.payment.status }}</td>
+              <td>{{ convertTimestamp(transactions.createdAt) }}</td>
+              <td>
+                <div class="d-flex gap-2">
+                  <button
+                    *ngIf="!isPaid(transactions.payment)"
+                    class="btn btn-outline-secondary"
+                    (click)="selectTransactionForPayment(transactions)"
+                  >
+                    ADD PAYMENT
+                  </button>
+                  <button
+                    class="btn btn-success"
+                    (click)="reviewTransaction(transactions)"
+                  >
+                    Review
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-add-driver (onSelectDriver)="isDriverSelected($event)"></app-add-driver>
+<app-add-payment
+  (confirmOrder)="addPayment($event)"
+  [transaction]="selectedTransaction!"
+></app-add-payment>

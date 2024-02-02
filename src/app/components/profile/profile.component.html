@@ -1,0 +1,12 @@
+<div class="d-flex align-items-center justify-content-center vh-100">
+  <div class="container">
+    <img [src]="_users?.profile" width="100px" height="100px" />
+    <h4>{{ _users?.name }}</h4>
+    <h5>{{ _users?.email }}</h5>
+    <h5>+63 {{ _users?.phone }}</h5>
+    <div class="d-flex gap-3">
+      <button class="btn btn-success">EDIT PROFILE</button>
+      <button class="btn btn-danger" (click)="logout()">LOGOUT</button>
+    </div>
+  </div>
+</div>

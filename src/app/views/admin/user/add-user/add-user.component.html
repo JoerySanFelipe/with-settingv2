@@ -1,0 +1,125 @@
+<button
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#userModal"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    fill="currentColor"
+    class="bi bi-person-add me-3"
+    viewBox="0 0 16 16"
+  >
+    <path
+      d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0Zm-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"
+    />
+    <path
+      d="M8.256 14a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z"
+    /></svg
+  >ADD
+</button>
+
+<div
+  class="modal fade"
+  id="userModal"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-success">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">ADD USER</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form class="row g-3" [formGroup]="userForm" (submit)="submitUser()">
+          <div class="col-md-12">
+            <label for="fullname" class="form-label">Fullname</label>
+            <input
+              type="text"
+              class="form-control"
+              id="fullname"
+              formControlName="name"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="inputEmail4" class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="inputEmail4"
+              formControlName="email"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="inputPassword4" class="form-label">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="inputPassword4"
+              formControlName="password"
+            />
+          </div>
+          <div class="col-12">
+            <label for="inputAddress" class="form-label">Address</label>
+            <input
+              type="text"
+              class="form-control"
+              id="inputAddress"
+              formControlName="address"
+              placeholder="1234 Main St"
+            />
+          </div>
+
+          <div class="col-md-4">
+            <label for="inputState" class="form-label">USER LEVEL</label>
+            <select id="inputState" class="form-select" formControlName="type">
+              <option selected>SELECT TYPE</option>
+              <option value="staff">STAFF</option>
+              <option value="driver">DRIVER</option>
+            </select>
+          </div>
+          <div class="col-md-8">
+            <label for="phone" class="form-label">Phone</label>
+            <input
+              type="number"
+              class="form-control"
+              id="phone"
+              formControlName="phone"
+            />
+          </div>
+          <div class="col-12">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="
+                (loadingService.isLoading('user') | async) === true ||
+                userForm.invalid
+              "
+            >
+              <span
+                *ngIf="(loadingService.isLoading('user') | async) === true"
+                class="spinner-border spinner-border-sm me-2"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              {{
+                (loadingService.isLoading("user") | async) === true
+                  ? "Saving user..."
+                  : "Save user"
+              }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,79 @@
+<div class="container-fluid vh-100 p-3">
+    <div class="d-flex h-100 flex-column gap-3">
+        <div class="containers p-3">
+            <h5>Settings</h5>
+            <div class="settings-container">
+                <div class="row">
+
+                    <!-- Target Sales Row -->
+                    <div class="col settings-col">
+                        <div class="row target-sales-row">
+                            <div class="col target-sales-header">
+                                <h6 class="label">Target Sales</h6>
+                            </div>
+                            <div class="col">
+                                <input class="form-control target-sales-input" type="number">
+                            </div>
+                            <div class="col">
+                                <button class="btn btn-outline-secondary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Lockdown Row -->
+                    <div class="col settings-col">
+                        <div class="row system-lockdown-row">
+                            <div class="col system-lockdown-header">
+                                <h6 class="label">System Lockdown</h6>
+                            </div>
+                            <div class="col">
+                                <label class="switch">
+                                    <input type="checkbox" id="systemLockdownToggle">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Clearfix for New Row -->
+                    <div class="w-100"></div>
+
+                    <!-- Payment QR Code Row -->
+                    <div class="col settings-col">
+                        <div class="row payment-qr-code-row">
+                            <div class="col payment-qr-code-header">
+                                <h6 class="label">Payment QR Code</h6>
+                            </div>
+                            <div class="col">
+                                <button class="custom-button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-plus" viewBox="0 0 16 16">
+                                        <path
+                                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                                    </svg>
+                                    <input accept="image/*" type="file" />
+                                    Add image
+                                </button>
+                            </div>
+                            <div class="col">
+                                <button class="btn btn-outline-secondary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Backup-Data Row -->
+                    <div class="col settings-col">
+                        <div class="row backup-data-row">
+                            <div class="col backup-data-header">
+                                <h6 class="label">Backup Data</h6>
+                            </div>
+                            <div class="col">
+                                <button class="btn btn-primary">Download</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
